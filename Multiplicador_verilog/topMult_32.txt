@@ -1,0 +1,29 @@
+module mult(clk,rst,init,A,B,pp,done);
+input rst;
+input clk;
+input [15:0]A;
+input [15:0]B;
+output[31:0]r;
+output done;
+
+wire w_shft;
+wire w_reset;
+wire w_load;
+wire w_add;
+wire w_init_c;
+wire w_dec_c;
+wire w_zero;
+
+
+
+wire [31:0]w_A;
+wire [15:0]w_B;
+
+
+rcd rcd0 (.clk(clk), .in_B(B), .shift(w_shft), .load(w_load), .s_B(w_B));
+rci rci0 (.clk(clk), .in_A(A), .shift(w_shft), .load(w_load), .s_A(w_A));
+comp comp0 (.clk(clk), .init_c(w_init_c), .dec_c(w_dec_c), .z(w_zero));
+acc acc0(.clk(clk), .A(w_A), .add(w_add), .rst(w_load), r(r));
+control_multi control0 (.clk(clk), .rst(rst), .load(w_load), .lsb_B(w_B[0]), .init(init), .z(w_zero), .done(done), .sh(w_shft), reset(w_reset), .init_c(w_init_c), .dec_c(w_dec_c), .add(w_add) );
+
+endmodule
